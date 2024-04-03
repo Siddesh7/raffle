@@ -1,49 +1,41 @@
-"use client";
 import React, {useEffect} from "react";
-import {useWaitForTransactionReceipt, useWriteContract} from "wagmi";
-import {erc721Abi} from "viem";
-import {toast} from "react-toastify";
+import {raffleABI} from "../lib/contants";
 
-interface ApproveButtonProps {
-  tokenAddress: `0x${string}`;
-  args: any;
-  spender: `0x${string}`;
-  onApprove?: () => void;
+import {useWaitForTransactionReceipt, useWriteContract} from "wagmi";
+import {toast} from "react-toastify";
+interface CancelRaffleButtonProps {
+  raffleAddress: `0x${string}`;
   style?: string;
 }
-
-const ApproveButton: React.FC<ApproveButtonProps> = ({
-  tokenAddress,
-  args,
-  spender,
-  onApprove,
+const CancelRaffleButton: React.FC<CancelRaffleButtonProps> = ({
+  raffleAddress,
   style,
 }) => {
-  const {writeContract, data, status, isPending} = useWriteContract();
-
-  const approveToken = async () => {
-    console.log(`Approving token ${tokenAddress}`);
+  const {writeContract, data, status, isPending, error, failureReason} =
+    useWriteContract();
+  const cancelRaffle = async () => {
     writeContract({
-      abi: erc721Abi,
-      address: tokenAddress,
-      functionName: "approve",
-      args: [spender, args],
+      abi: raffleABI,
+      address: raffleAddress,
+      functionName: "cancelAuctionAndWithdrawNFT",
     });
   };
+
   const {isSuccess, isLoading} = useWaitForTransactionReceipt({
     hash: data,
   });
   useEffect(() => {
     if (isSuccess) {
-      onApprove && onApprove();
-      toast.success("Token Spend Approved");
+      toast.success("Raffle cancelled successfully");
     }
-  }, [status, isSuccess]);
-
+    if (error) {
+      toast.error(`Error cancelling raffle`);
+    }
+  }, [status, isSuccess, error]);
   return (
     <button
-      className={`btn disabled:text-black ${style}`}
-      onClick={approveToken}
+      className={`btn btn-secondary  w-[50%] rounded-none  rounded-br-xl h-14 disabled:text-black disabled:cursor-not-allowed ${style}`}
+      onClick={cancelRaffle}
       disabled={isPending || isLoading || isSuccess}
     >
       {isPending ? (
@@ -57,10 +49,10 @@ const ApproveButton: React.FC<ApproveButtonProps> = ({
           <span className="loading loading-spinner loading-md"></span>
         </div>
       ) : (
-        <p> {isSuccess ? "Approved " : "Approve"}</p>
+        <p> {isSuccess ? "Tx Sent " : "Cancel Raffle"}</p>
       )}
     </button>
   );
 };
 
-export default ApproveButton;
+export default CancelRaffleButton;

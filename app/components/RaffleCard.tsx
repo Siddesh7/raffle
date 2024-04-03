@@ -1,87 +1,220 @@
-import React from "react";
+"use client";
+import React, {useEffect} from "react";
 import {getTokenName, raffleABI} from "../lib/contants";
-import {useReadContract, useWriteContract} from "wagmi";
+import {useAccount, useReadContract} from "wagmi";
 import ApproveButton from "./ApproveButton";
+
+import BuyButton from "./BuyButton";
+import PickWinnerButton from "./PickWinnerButton";
+import CancelRaffleButton from "./CancelRaffleButton";
+import ClaimCancelledRaffleButton from "./ClaimCancelledRaffleButton";
 
 const RaffleCard = ({
   address,
   owner,
+  open,
 }: {
   address: `0x${string}`;
   owner?: boolean;
+  open?: boolean;
 }) => {
-  const [raffle, setRaffle] = React.useState<any[]>([]);
-  const {writeContractAsync, data: hash} = useWriteContract();
-
-  const {data} = useReadContract({
+  const [raffle, setRaffle] = React.useState<any[]>([
+    "",
+    "",
+    "",
+    "",
+    "",
+    true,
+    0,
+    0,
+    true,
+    false,
+    "",
+  ]);
+  const [nft, setNFT] = React.useState<any>({});
+  const {address: userAddress} = useAccount();
+  const {data: raffleInfo} = useReadContract({
     abi: raffleABI,
     address: address,
     functionName: "getRaffleInfo",
   });
 
+  const {data: userBalance} = useReadContract({
+    abi: raffleABI,
+    address: address,
+    functionName: "balanceOf",
+    args: [userAddress],
+  });
+
   React.useEffect(() => {
-    if (data) {
-      console.log(data);
-      setRaffle(data as any[]);
+    if (raffleInfo) {
+      console.log(raffleInfo);
+      setRaffle(raffleInfo as any[]);
     }
-  }, [data]);
+  }, [raffleInfo]);
 
-  const buyTicket = async () => {
-    await writeContractAsync({
-      abi: raffleABI,
-      address: address,
-      functionName: "buyTicket",
-    });
-    console.log(`Ticket bought`);
-    console.log(`Transaction hash: ${hash}`);
+  const fetchNFTmetadata = async (contract: string, id: string) => {
+    const metadata = await fetch(
+      `https://eth-sepolia.g.alchemy.com/nft/v3/rnAP11g690lmOLsCTFgyFNTjm5c9TYcQ/getNFTMetadata?contractAddress=${contract}&tokenId=${id}&refreshCache=false`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const metadataJson = await metadata.json();
+    console.log(metadataJson);
+    setNFT(metadataJson);
   };
-  const pickWinner = async () => {
-    await writeContractAsync({
-      abi: raffleABI,
-      address: address,
-      functionName: "pickWinner",
-    });
-    console.log(`Winner picked`);
-    console.log(`Transaction hash: ${hash}`);
-  };
+  useEffect(() => {
+    if (raffle.length > 0 && raffle[0] && raffle[1]) {
+      fetchNFTmetadata(raffle[0].toString(), raffle[1].toString());
+    }
+  }, [raffle]);
+
   return (
-    <div className="card w-96 bg-primary text-primary-content">
-      {raffle.length > 0 && (
-        <div className="card-body">
-          <h2 className="card-title">UD #{raffle[1].toString()}</h2>
-          <div>
-            <p>Available Tickets: {raffle[7].toString()}</p>
-            <p>Tickets Sold: {raffle[6].toString()}</p>
-
-            <p>Total Tickets: {raffle[3].toString()}</p>
-            <p>Reward NFT Domain: UD #{raffle[1].toString()}</p>
+    <>
+      {raffle[8] == open && (
+        <div className="card w-full bg-white text-primary-content">
+          <div className="card-body">
+            <h2 className="card-title">
+              <span className="font-bold text-2xl">
+                {raffle[10].toString()}
+              </span>
+            </h2>
+            <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-title text-sm">Tickets Sold</div>
+                <div className="stat-value text-sm">{raffle[6].toString()}</div>
+              </div>{" "}
+              <div className="stat">
+                <div className="stat-title text-sm">Total Tickets</div>
+                <div className="stat-value text-sm">{raffle[3].toString()}</div>
+              </div>
+            </div>
+            <div className="stats shadow"></div>
+            <div className="stats">
+              <div className="stat">
+                <div className="stat-title text-sm">Raffling</div>
+                <div className="stat-value text-sm">
+                  {nft.name ?? nft?.contract?.name}
+                </div>
+              </div>
+            </div>
+            <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-title text-sm ">Ticket Price</div>
+                <div className="stat-value text-sm ">
+                  {Number(raffle[2].toString()) / 10 ** 18} $
+                  {getTokenName(raffle[4].toString())}
+                </div>
+              </div>
+            </div>
           </div>
           <div className="card-actions flex  flex-row justify-between items-center">
-            <p className="text-xl text-[green]">
-              {Number(raffle[2].toString()) / 10 ** 18} $
-              {getTokenName(raffle[4].toString())}
-            </p>
-            {owner ? (
-              <button onClick={pickWinner} className="btn">
-                Pick Winner
-              </button>
-            ) : (
-              <div className="flex flex-row gap-2">
-                {" "}
-                <ApproveButton
-                  tokenAddress={raffle[4].toString()}
-                  spender={address}
-                  args={BigInt(2316752318523187562137312651238)}
-                />
-                <button onClick={buyTicket} className="btn">
-                  Buy Now
-                </button>
+            {open && (
+              <div className="w-full">
+                {owner ? (
+                  <div className="w-full flex flex-row ">
+                    <PickWinnerButton raffleAddress={address} />
+                    <CancelRaffleButton raffleAddress={address} />
+                  </div>
+                ) : (
+                  <div className="w-full flex flex-row ">
+                    <ApproveButton
+                      tokenAddress={raffle[4].toString()}
+                      spender={address}
+                      args={BigInt(raffle[2].toString())}
+                      style={
+                        "btn btn-primary w-[50%] rounded-none  rounded-bl-xl h-14"
+                      }
+                    />
+                    <BuyButton
+                      tokenAddress={raffle[4].toString()}
+                      raffleAddress={address}
+                      ticketCost={Number(raffle[2].toString())}
+                    />
+                  </div>
+                )}
               </div>
             )}
           </div>
         </div>
       )}
-    </div>
+
+      {open === undefined && Number(userBalance?.toString()) > 0 && (
+        <div className="card w-full bg-white text-primary-content">
+          <div className="card-body">
+            <h2 className="card-title">
+              <span className="font-bold text-2xl">
+                {raffle[10].toString()}
+              </span>
+              <div
+                className={`badge ${
+                  raffle[9] === true
+                    ? "badge-error text-white"
+                    : raffle[8] === true
+                    ? "badge-primary badge-primary-content"
+                    : "badge-secondary-content badge-secondary"
+                }`}
+              >
+                {raffle[9] === true ? (
+                  "cancelled"
+                ) : (
+                  <p>{raffle[8] === true ? "open" : "closed"}</p>
+                )}
+              </div>
+            </h2>
+            <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-title text-sm">Tickets Sold</div>
+                <div className="stat-value text-sm">{raffle[6].toString()}</div>
+              </div>{" "}
+              <div className="stat">
+                <div className="stat-title text-sm">Total Tickets</div>
+                <div className="stat-value text-sm">{raffle[3].toString()}</div>
+              </div>
+            </div>
+            <div className="stats shadow"></div>
+            <div className="stats">
+              <div className="stat">
+                <div className="stat-title text-sm">Raffling</div>
+                <div className="stat-value text-sm">
+                  {nft.name ?? nft?.contract?.name}
+                </div>
+              </div>
+            </div>
+            <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-title text-sm ">Ticket Price</div>
+                <div className="stat-value text-sm ">
+                  {Number(raffle[2].toString()) / 10 ** 18} $
+                  {getTokenName(raffle[4].toString())}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="card-actions flex  flex-row justify-between items-center">
+            {raffle[9] === true ? (
+              <ClaimCancelledRaffleButton raffleAddress={address} />
+            ) : (
+              <button
+                disabled
+                className="btn disabled:bg-accent h-14 disabled:text-white w-full rounded-none rounded-b-xl"
+              >
+                {raffle[8] === false && raffle[9] === false
+                  ? `Winner: ${raffle[11].toString().slice(0, 6)}...${raffle[11]
+                      .toString()
+                      .slice(-4)}`
+                  : `You have ${userBalance?.toString()} Tickets`}
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

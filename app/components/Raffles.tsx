@@ -22,7 +22,7 @@ const RafflesComponent = () => {
   return (
     <div className="p-4">
       <p className="text-3xl text-bold">Raffles Open</p>
-      <div className="flex flex-row gap-2 p-4">
+      <div className="flex flex-row flex-wrap gap-2 p-4">
         {raffles &&
           raffles?.length > 0 &&
           raffles?.map((raffle: any, index: number) => {

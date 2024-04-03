@@ -1,49 +1,42 @@
-"use client";
 import React, {useEffect} from "react";
-import {useWaitForTransactionReceipt, useWriteContract} from "wagmi";
-import {erc721Abi} from "viem";
-import {toast} from "react-toastify";
+import {raffleABI} from "../lib/contants";
 
-interface ApproveButtonProps {
-  tokenAddress: `0x${string}`;
-  args: any;
-  spender: `0x${string}`;
-  onApprove?: () => void;
+import {useWaitForTransactionReceipt, useWriteContract} from "wagmi";
+import {toast} from "react-toastify";
+interface ClaimCancelledRaffleButtonProps {
+  raffleAddress: `0x${string}`;
   style?: string;
 }
-
-const ApproveButton: React.FC<ApproveButtonProps> = ({
-  tokenAddress,
-  args,
-  spender,
-  onApprove,
+const ClaimCancelledRaffleButton: React.FC<ClaimCancelledRaffleButtonProps> = ({
+  raffleAddress,
   style,
 }) => {
-  const {writeContract, data, status, isPending} = useWriteContract();
-
-  const approveToken = async () => {
-    console.log(`Approving token ${tokenAddress}`);
+  const {writeContract, data, status, isPending, error, failureReason} =
+    useWriteContract();
+  const claimFunds = async () => {
     writeContract({
-      abi: erc721Abi,
-      address: tokenAddress,
-      functionName: "approve",
-      args: [spender, args],
+      abi: raffleABI,
+      address: raffleAddress,
+      functionName: "withdrawFunds",
     });
   };
+
   const {isSuccess, isLoading} = useWaitForTransactionReceipt({
     hash: data,
   });
   useEffect(() => {
+    console.log(error, failureReason);
     if (isSuccess) {
-      onApprove && onApprove();
-      toast.success("Token Spend Approved");
+      toast.success("Funds claimed successfully");
     }
-  }, [status, isSuccess]);
-
+    if (error) {
+      toast.error(`Error claiming your funds`);
+    }
+  }, [status, isSuccess, error]);
   return (
     <button
-      className={`btn disabled:text-black ${style}`}
-      onClick={approveToken}
+      className={`btn btn-secondary  w-full rounded-none  rounded-br-xl h-14 disabled:text-black disabled:cursor-not-allowed ${style}`}
+      onClick={claimFunds}
       disabled={isPending || isLoading || isSuccess}
     >
       {isPending ? (
@@ -57,10 +50,10 @@ const ApproveButton: React.FC<ApproveButtonProps> = ({
           <span className="loading loading-spinner loading-md"></span>
         </div>
       ) : (
-        <p> {isSuccess ? "Approved " : "Approve"}</p>
+        <p> {isSuccess ? "Tx Sent " : "Claim your funds"}</p>
       )}
     </button>
   );
 };
 
-export default ApproveButton;
+export default ClaimCancelledRaffleButton;

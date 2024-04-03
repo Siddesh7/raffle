@@ -5,6 +5,7 @@ import {
   RainbowKitProvider,
   getDefaultWallets,
   getDefaultConfig,
+  darkTheme,
 } from "@rainbow-me/rainbowkit";
 import {
   argentWallet,
@@ -22,7 +23,7 @@ import {
   zora,
 } from "wagmi/chains";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import {WagmiProvider} from "wagmi";
+import {http, WagmiProvider} from "wagmi";
 
 const {wallets} = getDefaultWallets();
 
@@ -36,7 +37,10 @@ const config = getDefaultConfig({
       wallets: [argentWallet, trustWallet, ledgerWallet],
     },
   ],
-  chains: [polygonMumbai],
+  chains: [sepolia, polygonMumbai],
+  transports: {
+    [sepolia.id]: http(process.env.NEXT_PUBLIC_ALCHEMY_RPC_URL),
+  },
   ssr: true,
 });
 
@@ -46,7 +50,9 @@ export function Providers({children}: {children: React.ReactNode}) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>{children}</RainbowKitProvider>
+        <RainbowKitProvider coolMode theme={darkTheme()}>
+          {children}
+        </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );
