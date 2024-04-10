@@ -46,7 +46,7 @@ const CreateRaffleForm = ({
     );
     const resJson = await res.json();
     const ownedNFTs = resJson.ownedNfts;
-    console.log("ownedNFTs", ownedNFTs);
+
     if (ownedNFTs.length > 0) {
       setSelectedNFT(
         ownedNFTs[0].contract.address + ":" + ownedNFTs[0].id.tokenId

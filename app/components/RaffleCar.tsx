@@ -68,14 +68,10 @@ const RaffleCard = ({
   }, [raffleInfo]);
 
   useEffect(() => {
-    console.log(raffleOwnerInfo);
-    console.log(userAddress);
     if (raffleOwnerInfo) {
       setRaffleOwner(raffleOwnerInfo as string);
     }
   }, [raffleOwnerInfo]);
-
-  console.log(Number(userBalance));
 
   const fetchNFTmetadata = async (contract: string, id: string) => {
     const metadata = await fetch(

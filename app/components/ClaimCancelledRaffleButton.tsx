@@ -25,7 +25,6 @@ const ClaimCancelledRaffleButton: React.FC<ClaimCancelledRaffleButtonProps> = ({
     hash: data,
   });
   useEffect(() => {
-    console.log(error, failureReason);
     if (isSuccess) {
       toast.success("Funds claimed successfully");
     }

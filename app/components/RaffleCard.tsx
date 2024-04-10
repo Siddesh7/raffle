@@ -49,7 +49,6 @@ const RaffleCard = ({
 
   React.useEffect(() => {
     if (raffleInfo) {
-      console.log(raffleInfo);
       setRaffle(raffleInfo as any[]);
     }
   }, [raffleInfo]);
@@ -65,7 +64,7 @@ const RaffleCard = ({
       }
     );
     const metadataJson = await metadata.json();
-    console.log(metadataJson);
+
     setNFT(metadataJson);
   };
   useEffect(() => {

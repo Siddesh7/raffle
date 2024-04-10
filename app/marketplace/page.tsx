@@ -17,7 +17,6 @@ const RafflesComponent = () => {
 
   React.useEffect(() => {
     if (allRaffles) {
-      console.log(allRaffles);
       setRaffles(allRaffles as any[]);
     }
   }, [allRaffles]);

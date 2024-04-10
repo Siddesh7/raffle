@@ -14,7 +14,6 @@ const RafflesComponent = () => {
 
   React.useEffect(() => {
     if (data) {
-      console.log(data);
       setRaffles(data as any[]);
     }
   }, [data]);
