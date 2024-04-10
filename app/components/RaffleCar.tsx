@@ -192,7 +192,7 @@ const RaffleCard = ({
                           </div>
                         )}
 
-                        {showUserFeatures && (
+                        {showUserFeatures && raffle[8] === true && (
                           <div className="w-full flex flex-row ">
                             <ApproveButton
                               tokenAddress={raffle[4].toString()}
@@ -326,7 +326,7 @@ const RaffleCard = ({
                             </div>
                           )}
 
-                        {showUserFeatures && (
+                        {showUserFeatures && raffle[8] === true && (
                           <div className="w-full flex flex-row ">
                             <ApproveButton
                               tokenAddress={raffle[4].toString()}
@@ -451,8 +451,7 @@ const RaffleCard = ({
                         <CancelRaffleButton raffleAddress={address} />
                       </div>
                     )}
-
-                    {showUserFeatures && (
+                    {showUserFeatures && raffle[8] === true && (
                       <div className="w-full flex flex-row ">
                         <ApproveButton
                           tokenAddress={raffle[4].toString()}
@@ -583,8 +582,7 @@ const RaffleCard = ({
                         <CancelRaffleButton raffleAddress={address} />
                       </div>
                     )}
-
-                    {showUserFeatures && (
+                    {showUserFeatures && raffle[8] === true && (
                       <div className="w-full flex flex-row ">
                         <ApproveButton
                           tokenAddress={raffle[4].toString()}
@@ -710,7 +708,7 @@ const RaffleCard = ({
                         </div>
                       )}
 
-                    {showUserFeatures && (
+                    {showUserFeatures && raffle[8] === true && (
                       <div className="w-full flex flex-row ">
                         <ApproveButton
                           tokenAddress={raffle[4].toString()}
@@ -834,7 +832,7 @@ const RaffleCard = ({
                   </div>
                 )}
 
-                {showUserFeatures && (
+                {showUserFeatures && raffle[8] === true && (
                   <div className="w-full flex flex-row ">
                     <ApproveButton
                       tokenAddress={raffle[4].toString()}
