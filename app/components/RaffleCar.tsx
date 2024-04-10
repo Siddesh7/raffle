@@ -174,7 +174,7 @@ const RaffleCard = ({
                               Ticket Price
                             </div>
                             <div className="stat-value text-sm ">
-                              {Number(raffle[2].toString()) / 10 ** 18} $
+                              {Number(raffle[2].toString()) / 10 ** 6} $
                               {getTokenName(raffle[4].toString())}
                             </div>
                           </div>
@@ -306,7 +306,7 @@ const RaffleCard = ({
                               Ticket Price
                             </div>
                             <div className="stat-value text-sm ">
-                              {Number(raffle[2].toString()) / 10 ** 18} $
+                              {Number(raffle[2].toString()) / 10 ** 6} $
                               {getTokenName(raffle[4].toString())}
                             </div>
                           </div>
@@ -434,7 +434,7 @@ const RaffleCard = ({
                       <div className="stat">
                         <div className="stat-title text-sm ">Ticket Price</div>
                         <div className="stat-value text-sm ">
-                          {Number(raffle[2].toString()) / 10 ** 18} $
+                          {Number(raffle[2].toString()) / 10 ** 6} $
                           {getTokenName(raffle[4].toString())}
                         </div>
                       </div>
@@ -565,7 +565,7 @@ const RaffleCard = ({
                       <div className="stat">
                         <div className="stat-title text-sm ">Ticket Price</div>
                         <div className="stat-value text-sm ">
-                          {Number(raffle[2].toString()) / 10 ** 18} $
+                          {Number(raffle[2].toString()) / 10 ** 6} $
                           {getTokenName(raffle[4].toString())}
                         </div>
                       </div>
@@ -688,7 +688,7 @@ const RaffleCard = ({
                       <div className="stat">
                         <div className="stat-title text-sm ">Ticket Price</div>
                         <div className="stat-value text-sm ">
-                          {Number(raffle[2].toString()) / 10 ** 18} $
+                          {Number(raffle[2].toString()) / 10 ** 6} $
                           {getTokenName(raffle[4].toString())}
                         </div>
                       </div>
@@ -814,7 +814,7 @@ const RaffleCard = ({
                   <div className="stat">
                     <div className="stat-title text-sm ">Ticket Price</div>
                     <div className="stat-value text-sm ">
-                      {Number(raffle[2].toString()) / 10 ** 18} $
+                      {Number(raffle[2].toString()) / 10 ** 6} $
                       {getTokenName(raffle[4].toString())}
                     </div>
                   </div>
