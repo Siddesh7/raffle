@@ -1127,11 +1127,11 @@ export const raffleABI = [
     type: "function",
   },
 ];
-export const UD_ADDRESS = "0x88f6D29C94E933F7C9Abf8821B081e1804579283";
-export const USDC_ADDRESS = "0x8D79c6Fa771a8A94Bf510DC565912819FEf6EB1A";
-export const USDT_ADDRESS = "0x8D79c6Fa771a8A94Bf510DC565912819FEf6EB1A";
+export const UD_ADDRESS = "0xa9a6a3626993d487d2dbda3173cf58ca1a9d9e9f";
+export const USDC_ADDRESS = "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359";
+export const USDT_ADDRESS = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F";
 export const raffleFactoryAddress =
-  "0x7A3A7976DD4e4a65774CA1e20EA08EFA50894C22";
+  "0x71ED37f0860Fc74bCcd771580d48B577593E3855";
 export const getTokenAddress = (token: string) => {
   switch (token) {
     case "USDC":

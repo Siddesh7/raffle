@@ -12,24 +12,15 @@ import {
   trustWallet,
   ledgerWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import {
-  arbitrum,
-  base,
-  mainnet,
-  optimism,
-  polygon,
-  polygonMumbai,
-  sepolia,
-  zora,
-} from "wagmi/chains";
+import {polygon} from "wagmi/chains";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {http, WagmiProvider} from "wagmi";
 
 const {wallets} = getDefaultWallets();
 
 const config = getDefaultConfig({
-  appName: "RainbowKit demo",
-  projectId: "YOUR_PROJECT_ID",
+  appName: "web3raffles",
+  projectId: "61c85254bd4fbb528882f6a3043c428c",
   wallets: [
     ...wallets,
     {
@@ -37,9 +28,9 @@ const config = getDefaultConfig({
       wallets: [argentWallet, trustWallet, ledgerWallet],
     },
   ],
-  chains: [sepolia, polygonMumbai],
+  chains: [polygon],
   transports: {
-    [sepolia.id]: http(process.env.NEXT_PUBLIC_ALCHEMY_RPC_URL),
+    [polygon.id]: http(process.env.NEXT_PUBLIC_ALCHEMY_RPC_URL),
   },
   ssr: true,
 });

@@ -2,7 +2,7 @@
 import React from "react";
 import {useAccount, useReadContract, useWriteContract} from "wagmi";
 import {raffleFactoryABI, raffleFactoryAddress} from "../lib/contants";
-import RaffleCard from "../components/RaffleCard";
+import RaffleCard from "../components/RaffleCar";
 import CardSkeleten from "../components/CardSkeleten";
 import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -53,7 +53,13 @@ const RafflesComponent = () => {
           raffles?.length > 0 &&
           raffles.map((raffle: any, index: number) => {
             return (
-              <RaffleCard key={index} address={raffle} open={showOpenRaffles} />
+              <RaffleCard
+                key={index}
+                address={raffle}
+                showUserFeatures={true}
+                showStatus={true}
+                open={showOpenRaffles}
+              />
             );
           })}
       </div>

@@ -19,7 +19,7 @@ const ApproveButton: React.FC<ApproveButtonProps> = ({
   onApprove,
   style,
 }) => {
-  const {writeContract, data, status, isPending} = useWriteContract();
+  const {writeContract, data, status, isPending, error} = useWriteContract();
 
   const approveToken = async () => {
     console.log(`Approving token ${tokenAddress}`);
@@ -40,9 +40,15 @@ const ApproveButton: React.FC<ApproveButtonProps> = ({
     }
   }, [status, isSuccess]);
 
+  useEffect(() => {
+    console.log("error", error);
+    if (error) {
+      toast.error("Error approving token");
+    }
+  }, [error]);
   return (
     <button
-      className={`btn disabled:text-black ${style}`}
+      className={`btn btn-primary disabled:text-black ${style}`}
       onClick={approveToken}
       disabled={isPending || isLoading || isSuccess}
     >

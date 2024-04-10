@@ -64,7 +64,7 @@ const CreateRaffleForm = ({
       args: [
         nftAddress,
         tokenId,
-        ticketPrice * 10 ** 18,
+        ticketPrice * 10 ** 6,
         totalTickets,
         true,
         acceptedTokenAddress,
@@ -108,13 +108,13 @@ const CreateRaffleForm = ({
     <div>
       {showModal ? (
         <div className="absolute top-0 w-[100vw] h-[100vh] flex justify-center items-center bg-opacity-20 backdrop-blur-xl bg-white/10 z-[50]">
-          <div className="card w-[30rem] bg-white text-primary-content">
+          <div className="card w-[30rem] bg-gray-300 text-black">
             <div className="card-body">
               <p className="text-extrabold text-2xl text-center">
                 Create your raffle
               </p>
               <button
-                className="btn btn-sm btn-circle text-white bg-black/70 border-none absolute right-4 top-4"
+                className="btn btn-sm btn-circle  border-none absolute right-4 top-4"
                 onClick={onClose}
               >
                 ✕
@@ -128,7 +128,7 @@ const CreateRaffleForm = ({
                   id="raffleName"
                   name="raffleName"
                   placeholder="Raffle Name"
-                  className="input w-full  text-white  bg-base-100 border-black border-2 rounded-md p-2"
+                  className="input w-full  text-primary   border-2 rounded-md p-2"
                   value={raffleName}
                   onChange={(e) => setRaffleName(e.target.value)}
                 />
@@ -139,7 +139,7 @@ const CreateRaffleForm = ({
 
                   <select
                     name="nft"
-                    className="btn max-w-[100%] text-white bg-base-100 border-black border-2 rounded-md p-2 text-left"
+                    className="btn max-w-[100%] text-primary border-2 rounded-md p-2 text-left"
                     id="nft"
                     value={selectedNft}
                     onChange={(e) => setSelectedNFT(e.target.value)}
@@ -151,14 +151,13 @@ const CreateRaffleForm = ({
                           key={index}
                           value={`${nft.contract.address}:${nft.id.tokenId}`}
                         >
-                          {nft.contractMetadata.name} :{" "}
-                          {parseInt(nft.id.tokenId, 16)}
+                          {nft.title}
                         </option>
                       );
                     })}
                   </select>
                   {NFTs.length === 0 && (
-                    <p className="text-white">You don&apos;t have any NFTs</p>
+                    <p className="text-error">You don&apos;t have any NFTs</p>
                   )}
                 </div>
                 <div className="flex flex-col">
@@ -168,7 +167,7 @@ const CreateRaffleForm = ({
 
                   <select
                     name="nft"
-                    className="btn max-w-[100%] text-white bg-base-100 border-black border-2 rounded-md p-2 text-left"
+                    className="btn max-w-[100%] text-primary border-2 rounded-md p-2 text-left"
                     id="nft"
                     value={acceptedTokenAddress}
                     onChange={(e) => setAcceptedTokenAddress(e.target.value)}
@@ -182,7 +181,7 @@ const CreateRaffleForm = ({
                     })}
                   </select>
                   {NFTs.length === 0 && (
-                    <p className="text-white">You don&apos;t have any NFTs</p>
+                    <p className="text-error">You don&apos;t have any NFTs</p>
                   )}
                 </div>
                 <label htmlFor="ticketPrice" className="text-bold text-g mb-1">
@@ -194,7 +193,7 @@ const CreateRaffleForm = ({
                   id="ticketPrice"
                   name="ticketPrice"
                   placeholder="Ticket Price"
-                  className="input w-full  text-white  bg-base-100 border-black border-2 rounded-md p-2"
+                  className="input w-full  text-primary border-2 rounded-md p-2"
                   value={ticketPrice}
                   onChange={(e) => {
                     if (/^[0-9]*$/.test(e.target.value))
@@ -210,7 +209,7 @@ const CreateRaffleForm = ({
                   id="totalTickets"
                   name="totalTickets"
                   placeholder="Total tickets"
-                  className="input w-full  text-white  bg-base-100 border-black border-2 rounded-md p-2"
+                  className="input w-full  text-primary border-2 rounded-md p-2"
                   value={totalTickets}
                   onChange={(e) => {
                     if (/^[0-9]*$/.test(e.target.value))

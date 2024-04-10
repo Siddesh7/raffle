@@ -10,7 +10,7 @@ const config: Config = {
     extend: {},
   },
   daisyui: {
-    themes: ["halloween"],
+    themes: ["light", "dark"],
   },
   plugins: [require("daisyui")],
 };
